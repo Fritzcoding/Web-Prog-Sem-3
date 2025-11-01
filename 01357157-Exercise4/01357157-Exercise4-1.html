@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise 4-1</title>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      font-size: 24px;
+      padding: 20px;
+      font-weight: 630;
+    }
+    .name {
+      color: Firebrick;
+      font-weight: 900;
+    }
+    .age {
+      color: Navy;
+      text-decoration: underline;
+      font-weight: normal;
+    }
+  </style>
+
+    <div id="output"></div>
+
+  <script>
+    const name = prompt("這個網頁顯示\nPlease input your name:");
+    const birthYear = parseInt(prompt("Please input your birth year:"), 10);
+    const outputDiv = document.getElementById("output");
+    const thisYear = new Date().getFullYear();
+    const age = thisYear - birthYear;
+    let message = ``;
+
+    if (isNaN(birthYear) || age <= 0) {
+      alert("Error: Invalid age!");
+      console.error("Error: Invalid age!");
+      outputDiv.innerHTML = `Hello, <span class="name">${name}</span> ! <br>
+                             Your age is a mystery!`;
+    } 
+    else {
+      if(age > 1){
+        message = `Hello, <span class="name">${name}</span> ! <br>
+                         You are <span class="age">${age}</span> years old!`;
+        console.log(`Hello, ${name}!\nYou are ${age} years old`);
+      }
+      else if(age == 1){
+        message = `Hello, <span class="name">Kid</span> ! <br>
+                         You are <span class="age">one</span> year old!`;
+        console.log(`Hello, ${name}!\nYou are one year old`);
+      }
+      outputDiv.innerHTML = message;
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>

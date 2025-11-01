@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Function</title>
+    <style type="text/css">
+        li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        ol {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        img.dice {
+            width: 100px;
+            height: 100px;
+        }
+
+        img.congrats {
+            width: 440px;
+        }
+
+        #msg {
+            font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+            font-size: 120%;
+            color: navy;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="#">
+        <input id="rollButton" type="button" value="Roll Dice">
+        <input id="cheatButton" type="button" value="Shortcut">
+        <input id="cheatButton2" type="button" value="Shortcut2">
+    </form>
+    <ol>
+        <li><img id="die1" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die2" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die3" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die4" class="dice" src="blank.jpg" alt="blank image"></li>
+    </ol>
+    <div id="msg"></div>
+
+    <script>
+        const diceImgs = ["die1.jpg", "die2.jpg", "die3.jpg", "die4.jpg", "die5.jpg", "die6.jpg"];
+
+        function rollDice(forceValues = null) {
+            let dice = [];
+            if (forceValues) {
+                dice = forceValues;
+            } else {
+                for (let i = 0; i < 4; i++) {
+                    dice.push(Math.floor(Math.random() * 6) + 1);
+                }
+            }
+
+            document.getElementById("die1").src = diceImgs[dice[0] - 1];
+            document.getElementById("die2").src = diceImgs[dice[1] - 1];
+            document.getElementById("die3").src = diceImgs[dice[2] - 1];
+            document.getElementById("die4").src = diceImgs[dice[3] - 1];
+
+            checkResult(dice);
+        }
+
+        // Check game logic
+        function checkResult(dice) {
+            const msg = document.getElementById("msg");
+            msg.innerHTML = ""; // clear
+
+            const count = {};
+            dice.forEach(d => count[d] = (count[d] || 0) + 1);
+            const vals = Object.values(count);
+
+            if (vals.includes(4)) {
+                msg.innerHTML = "Congratulations! Your roll is \"一色\"!<br><img class='congrats' src='congrats.png'>";
+                return;
+            }
+
+            if (vals.length === 4) {
+                msg.innerHTML = "<p>Oops! Your roll is \"無面\"！</p>";
+                return;
+            }
+
+            if (vals.includes(3)) {
+                msg.innerHTML = "<p>No decision, please re-roll the dice!</p>";
+                return;
+            }
+
+            if (vals.includes(2)) {
+            const pairVals = Object.keys(count)
+                .filter(k => count[k] === 2)
+                .map(x => parseInt(x));
+
+            const total = dice.reduce((s, v) => s + v, 0);
+
+            let score;
+
+            if (pairVals.length === 1) {
+                const pairValue = pairVals[0];
+                const others = dice.filter(d => d !== pairValue);
+                score = others[0] + others[1];
+            } else {
+                const scores = pairVals.map(p => total - 2 * p);
+                score = Math.max(...scores);
+            }
+            if (score === 12) {
+                msg.innerHTML += "Congratulations! Your roll is \"十八\"！<br><img class='congrats' src='congrats.png'><br>Your score is 12!";
+                return;
+            }
+            
+            msg.innerHTML = `<p>Your score is ${score}!</p>`;
+            
+        }
+
+        }
+
+        document.getElementById("rollButton").onclick = function () {
+            rollDice();
+        };
+
+        document.getElementById("cheatButton").onclick = function () {
+            const val = Math.floor(Math.random() * 6) + 1;
+            rollDice([val, val, val, val]);
+        };
+
+        document.getElementById("cheatButton2").onclick = function () {
+            const val = Math.floor(Math.random() * 5) + 1;
+            rollDice([6, 6, val, val]);
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Basic DOM and function</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+    }
+
+    input, select, button {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 120%;
+      width: 200px;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .result {
+      font-size: 120%;
+      padding: 10px;
+      border: 3px solid #ddd;
+      width: 200px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Simple Calculator</h3>
+
+  <div class="calculator">
+    <input type="number" id="num1" placeholder="Input first number">
+    <select id="operator">
+      <option value="+">+</option>
+      <option value="-">−</option>
+      <option value="*">×</option>
+      <option value="÷">÷</option>
+    </select>
+    <input type="number" id="num2" placeholder="Input second number">
+    <button onclick="calculate()">Calculate</button>
+  </div>
+
+  <div id="result" class="result">Results</div>
+
+  <script>
+    function calculate() {
+      const num1 = parseFloat(document.getElementById("num1").value);
+      const num2 = parseFloat(document.getElementById("num2").value);
+      const operator = document.getElementById("operator").value;
+      const resultDiv = document.getElementById("result");
+
+      let result;
+
+      if (isNaN(num1) || isNaN(num2)) {
+        resultDiv.innerText = "Please enter valid numbers.";
+        return;
+      }
+
+      if (operator === "÷" && num2 === 0) {
+        resultDiv.innerText = "Dividing by 0 is illegal";
+        return;
+      }
+
+      switch (operator) {
+        case "+": result = num1 + num2; break;
+        case "-": result = num1 - num2; break;
+        case "*": result = num1 * num2; break;
+        case "÷": result = num1 / num2; break;
+      }
+
+      resultDiv.innerText = result;
+    }
+  </script>
+
+</body>
+
+</html>

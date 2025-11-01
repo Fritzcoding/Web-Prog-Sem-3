@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>出包理由產生器</title>
+    <style>
+        @import url("https://fonts.googleapis.com/earlyaccess/cwtexkai.css");
+
+        body {
+            font-family: cwTeXKai, Perpetua, serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        h1 {
+            margin: 10px 0;
+        }
+
+        .title {
+            color: #2C3033; /* Onyx */
+            font-size: 100%;
+        }
+
+        .adj-noun {
+            color: #7392B7; /* Silver Lake Blue */
+            font-size: 100%;
+        }
+
+        .verb {
+            color: #AD343E; /* Cardinal */
+            font-size: 150%;
+        }
+
+        img.reason-img {
+            height: 300px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        const adjAry = ["客戶那邊的", "我們的", "負責談需求的", "負責這個部分的", "直到上線前一天", "(雙手一攤)"];
+        const nounAry = ["專案經理", "主管", "工程師", "設計師", "外包", "User", "聯絡窗口"];
+        const verbAry = [
+            "當初沒有講清楚!", "一直換!", "說他肚子不舒服!", "擺爛不想做了!", "突然開始放長假!", "去生小孩了!", "離職了!", 
+            "都沒甚麼 sense!", "都沒有跟我講!", "以為這些不用做!", "一直在狀況外!", "做事拖拖拉拉!", "還搞不清楚狀況!", 
+            "Quality 有問題!", "東西一直改!", "在整我!", "突然就沒來了!"
+        ];
+        const imgAry = ["cat.jpg", "boy.jpg", "ohtani.jpg", "harry.jpg", "jacky.jpg"];
+
+        function randomPick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        window.onload = function () {
+            const adj = randomPick(adjAry);
+            const noun = randomPick(nounAry);
+            const verb = randomPick(verbAry);
+            const imgName = randomPick(imgAry);
+
+            const display = document.getElementById("display");
+
+            display.innerHTML = `
+                <h1 class="title">專案失敗了，是因為...</h1>
+                <h1 class="adj-noun">${adj}${noun}</h1>
+                <h1 class="verb">${verb}</h1>
+                <img class="reason-img" src="${imgName}" alt="reason image" id="reasonImg">
+            `;
+
+            document.getElementById("reasonImg").onclick = function () {
+                location.reload(); // reload page
+            };
+        };
+    </script>
+</head>
+
+<body>
+    <div id="display"></div>
+</body>
+
+</html>

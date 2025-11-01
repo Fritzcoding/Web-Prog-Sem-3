@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 2 Advanced web form</title>
+    <style>
+        body {
+        font-family: Perpetua, serif;
+      font-size: 1.3em;
+    }
+        body::first-letter {
+      font-size: 1.5em;
+    }
+
+    input{
+      color: blue;
+      font-weight: 600;
+    }
+
+    input[type="submit"], input[type="reset"] {
+      color: firebrick;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <h1>Advanced Web Form</h1>
+    <form action="https://form-api-5rvw.onrender.com/submitForm" method="POST">
+        <label>Your name:
+            <input type="text" name="fullname" required><br>
+        </label><br>
+        
+        <label>Your email:
+            <input type="email" name="email" required>
+        </label>(name@domain.com)<br><br>
+    
+        <label>Your homepage's URL:
+            <input type="url" name="url">
+        </label>http://www.domainname.com<br><br>
+    
+        <label>Your birthday date:
+            <input type="date" name="date">
+        </label>(yyyy--mm--dd)<br><br>
+        
+    
+        <label>Your favorite color:
+            <input type="color" name="color">
+        </label><br><br>
+    
+        <label>Your Department:</label>
+        <input list="departments" name="department" autocomplete="on">
+        <datalist id="departments">
+          <option value="Department of Aquaculture">
+          <option value="Department of Bioscience and Biotechnology">
+          <option value="Department of Communications, Navigation and Control Engineering">
+          <option value="Department of Computer Science and Engineering">
+          <option value="Department of Electrical Engineering">
+          <option value="Department of Environmental Biology and Fisheries Science">
+          <option value="Department of Food Science">
+          <option value="Department of Harbor and River Engineering">
+          <option value="Department of Marine Engineering">
+          <option value="Department of Marine Environmental Informatics">
+          <option value="Department of Mechanical and Mechatronic Engineering">
+          <option value="Department of Merchant Marine">
+          <option value="Department of Optoelectronics and Materials Technology">
+          <option value="Department of Shipping and Transportation Management">
+          <option value="Department of Systems Engineering and Naval Architecture">
+          <option value="Department of Transportation Science">
+        </datalist>
+        <br><br>
+    
+        <label><i><b>Check off all of the characteristics you enjoyed: </b></i><br>
+            <input type="checkbox" name="likes" value="Campus"> Campus
+            <input type="checkbox" name="likes" value="Students"> Students 
+            <input type="checkbox" name="likes" value="Location"> Location <br><br>
+        </label>
+    
+        <label><i><b>How did you become interested in our college? </b></i><br>
+            <input type="radio" name="interest" value="Friends"> Friends
+            <input type="radio" name="interest" value="Television"> Television
+            <input type="radio" name="interest" value="Internet"> Internet<br>
+        </label><br>
+    
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+      </form>
+</body>
+</html>

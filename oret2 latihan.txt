@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>OSwondsoq</title>
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+
+            .body{
+                font-family: Perpetua, Serif;
+                font-size: 24px;
+                margin: 0;
+                padding: 0px;
+            }
+            .container{
+                display: flex;
+                flex-wrap: wrap;
+
+
+            }
+
+            .box{
+                
+            }
+
+            .box::first-letter{
+                font-size: 220%;
+                float: left;
+                top:
+            }
+
+            @media (max-width: 600px){
+                .box{
+                    width: 100%;
+                    height: auto;
+                    overflow : visible;
+                }
+            }
+        </style>
+
+    </head>
+    <body>
+
+    </body>
+</html>

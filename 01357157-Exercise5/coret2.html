@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>corett2</title>
+    <style>
+        body {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif, Courier;
+        }
+
+        .Calculator{
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+        }
+
+        .Results{
+            border: 3px solid white;
+            box-sizing: border-box;
+        }
+
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        button:hover{
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Calculator">
+        <input type="number" id="num1">
+        <select id="operator">
+            <option value="+">+</option>
+            <option value="x">x</option>
+            <option value="bagi">bagi</option>
+        </select>
+        <input type="number" id="num2">
+        <button onclick="calculate()">calculate</button>
+    </div>
+
+    <div id="results" class="Results">results</div>
+
+    <script>
+        function calculate(){
+            const num1 = parseFloat(document.getElementById("num1").value);
+            const num2 = parseFloat(document.getElementById("num2").value);
+            const operator = document.getElementById("operator").value;
+            let resultDiv = document.getElementById("results");
+
+            if(isNaN(num1) || isNaN(num2)){
+                resultDiv.innerHTML = `Invalid number please try again`;
+                return;
+            }
+
+            if(operator === "bagi" && num2 === 0){
+                resultDiv.innerHTML = `gbs dibagi sm 0 please try again`;
+            }
+
+            switch(operator){
+                case "+": resultDiv.innerHTML = num1 + num2; break;
+                case "x": resultDiv.innerHTML = num1 * num2; break;
+                case "bagi": resultDiv.innerHTML = num1 / num2; break;
+                default: resultDiv.innerHTML = "Unknown operator"; break;
+            }
+        }
+    </script>
+</body> 
+
+</html>
