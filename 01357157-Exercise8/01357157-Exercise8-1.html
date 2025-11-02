@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <title>哆啦A夢道具抽選機</title>
+    <style>
+        @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+        body {
+            font-family: "cwTeXKai", "Noto Sans TC", serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        #gadget {
+            width: 300px;
+            height: 300px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: white;
+            display: block;
+            margin: 20px auto;
+        }
+        #play {
+            width: 200px;
+            height: 60px;
+            font-size: 20px;
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        #play:hover {
+            background-color: #1e90ffb3;
+        }
+        #play:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #messages {
+            width: 300px;
+            margin: 20px auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 18px;
+            min-height: 50px;
+        }
+    </style>
+    <script>
+        const gadgetString = "任意門 時光機 竹蜻蜓 時光布 記憶麵包 縮小燈 翻譯蒟蒻 如果電話亭 穿透環 更衣照相機";
+        const gadgetArray = gadgetString.split(" ");
+
+        function drawGadget() {
+            const playBtn = document.getElementById("play");
+            const img = document.getElementById("gadget");
+            const msg = document.getElementById("messages");
+            const sound = document.getElementById("sound");
+
+            // Disable button
+            playBtn.disabled = true;
+            msg.textContent = "抽取中...";
+            img.alt = "";
+            img.src = "blank.jpg"; // show gray background
+
+            // Generate random index 0–9
+            const randomIndex = Math.floor(Math.random() * gadgetArray.length);
+            const selectedGadget = gadgetArray[randomIndex];
+
+            // When sound ends, show result
+            sound.onended = function() {
+                const fileName = (randomIndex + 1).toString().padStart(2, '0') + ".png";
+                img.src = fileName;
+                msg.textContent = selectedGadget;
+                playBtn.disabled = false;
+            };
+
+            // Play Doraemon sound
+            sound.play();
+        }
+
+        window.onload = function() {
+            document.getElementById("gadget").src = "00.png";
+            document.getElementById("messages").textContent = "請按下按鈕抽出道具";
+            document.getElementById("play").onclick = drawGadget;
+        };
+    </script>
+</head>
+<body>
+    <audio id="sound" preload="auto">
+        <source src="doraemon.mp3" type="audio/mpeg">
+        您的瀏覽器不支援音效播放
+    </audio>
+
+    <img id="gadget" src="00.png" alt="gadget">
+    <p><input type="button" id="play" value="抽道具"></p>
+    <div id="messages">請按下按鈕抽出道具</div>
+</body>
+</html>

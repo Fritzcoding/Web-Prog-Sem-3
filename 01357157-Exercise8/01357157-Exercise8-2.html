@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Books (ex8-2)</title>
+<style>
+  body{
+    font-family:"Perpetua",Arial,sans-serif;
+    max-width:980px;
+    margin:18px auto;
+    padding:8px;
+    background:#fff;
+    color:#111;
+  }
+
+  .input-row{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:8px;
+    align-items:center;
+    margin-bottom:10px;
+  }
+
+  label{ white-space:nowrap; font-weight:bold; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="url"]{
+    height:26px;
+    padding:4px 6px;
+  }
+
+  /* widths adjusted */
+  #titleInput{ width:280px; }
+  #authorInput{ width:150px; }
+  #yearInput{ width:150px; }
+  #urlInput{ width:340px; }
+
+  .controls{ margin:8px 0 14px 0; }
+
+  input[type="button"]{
+    padding:6px 10px;
+    border:1px solid #666;
+    background:#eee;
+    cursor:pointer;
+    border-radius:3px;
+    font-size:13px;
+  }
+  input[type="button"]:hover{ background:#e0e0e0; }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-family:Perpetua,serif;
+  }
+  th,td{
+    border:1px solid #000;
+    padding:6px 8px;
+    text-align:center;
+    vertical-align:middle;
+  }
+  thead th{
+    background:#002a7f;
+    color:#fff;
+    font-weight:bold;
+  }
+  /* start color from white, then light blue alternation */
+  tbody tr:nth-child(odd) td{ background:#ffffff; }
+  tbody tr:nth-child(even) td{ background:#e6f2ff; }
+
+  a{
+    color:#6b1fa6;
+    text-decoration:underline;
+    word-break:break-all;
+    display:inline-block;
+    max-width:100%;
+  }
+
+  @media(max-width:820px){
+    .input-row{ flex-wrap:wrap; gap:6px; }
+  }
+</style>
+</head>
+<body>
+
+<form id="bookForm" onsubmit="return false;">
+  <div class="input-row">
+    <label>Book&nbsp;Title:</label><input id="titleInput" type="text">
+    <label>Author(s):</label><input id="authorInput" type="text">
+    <label>Year:</label><input id="yearInput" type="number" min="1000" max="3000">
+    <label>Book&nbsp;URL:</label><input id="urlInput" type="url">
+  </div>
+
+  <div class="controls">
+    <input type="button" id="addButton" value="Add New Item">
+    <input type="button" id="removeAllButton" value="Remove All Items">
+  </div>
+</form>
+
+<table id="booksTable">
+  <thead>
+    <tr>
+      <th style="width:44%;">Title</th>
+      <th style="width:22%;">Author</th>
+      <th style="width:10%;">Year</th>
+      <th style="width:24%;">URL</th>
+    </tr>
+  </thead>
+  <tbody id="booksBody"></tbody>
+</table>
+
+<script>
+function loadBooks(){
+  const tbody=document.getElementById('booksBody');
+  tbody.innerHTML='';
+
+  const keys=Object.keys(localStorage)
+    .filter(k=>k.startsWith('ntou-'))
+    .sort((a,b)=>Number(a.slice(5))-Number(b.slice(5)));
+
+  // Only show rows if we have data
+  if(keys.length===0) return;
+
+  keys.forEach((key)=>{
+    try{
+      const b=JSON.parse(localStorage.getItem(key));
+      const tr=document.createElement('tr');
+      const safeUrl=b.url||'#';
+      tr.innerHTML=`
+        <td>${b.title||''}</td>
+        <td>${b.author||''}</td>
+        <td>${b.year||''}</td>
+        <td><a href="${safeUrl}" target="_blank">${safeUrl}</a></td>`;
+      tbody.appendChild(tr);
+    }catch(e){ console.warn('Bad JSON for',key); }
+  });
+}
+
+function addNewItem(){
+  const title=document.getElementById('titleInput').value.trim();
+  const author=document.getElementById('authorInput').value.trim();
+  const year=document.getElementById('yearInput').value.trim();
+  const url=document.getElementById('urlInput').value.trim();
+
+  if(!title||!author||!year||!url){
+    alert('Please fill in all fields!');
+    return;
+  }
+
+  const key='ntou-'+new Date().getTime();
+  const obj={title,author,year,url};
+  localStorage.setItem(key,JSON.stringify(obj));
+
+  document.getElementById('titleInput').value='';
+  document.getElementById('authorInput').value='';
+  document.getElementById('yearInput').value='';
+  document.getElementById('urlInput').value='';
+
+  loadBooks();
+}
+
+function removeAllItems(){
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k&&k.startsWith('ntou-')) keys.push(k);
+  }
+  keys.forEach(k=>localStorage.removeItem(k));
+  alert('All items were removed!');
+  loadBooks();
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('addButton').addEventListener('click',addNewItem);
+  document.getElementById('removeAllButton').addEventListener('click',removeAllItems);
+
+  ['titleInput','authorInput','yearInput','urlInput'].forEach(id=>{
+    document.getElementById(id).addEventListener('keypress',e=>{
+      if(e.key==='Enter'){ e.preventDefault(); addNewItem(); }
+    });
+  });
+  loadBooks();
+});
+</script>
+</body>
+</html>
