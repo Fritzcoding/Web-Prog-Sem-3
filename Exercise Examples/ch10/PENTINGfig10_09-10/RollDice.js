@@ -18,12 +18,11 @@ function start() {
 // roll the dice
 function rollDice() {
    let face;  // face rolled
-   let length = dieImages.length;
 
-   for (let i = 0; i < length; ++i) {
+   for (let element in dieImages) {
       face = Math.floor(1 + Math.random() * 6);
       tallyRolls(face); // increment a frequency counter
-      setImage(i, face); // display appropriate die image
+      setImage(element, face); // display appropriate die image
       ++totalDice; // increment total 
    } // end for
 
@@ -51,11 +50,11 @@ function updateFrequencyTable() {
 
    // create table rows for frequencies
    for (let i = 1; i < length; ++i) {
-      results += "<tr><td>1</td><td>" + frequency[i] + "</td><td>" +
+      results += "<tr><td>" + i + "</td><td>" + frequency[i] + "</td><td>" +
          formatPercent(frequency[i] / totalDice) + "</td></tr>";
    } // end for
 
-   results += "</tbody></table>";
+   results += "<tr><td>" + totalDice + "</td></tr></tbody></table>";
    document.getElementById("frequencyTableDiv").innerHTML = results;
 } // end function updateFrequencyTable
 

@@ -7,7 +7,7 @@ td            { width: 50%; }
 th            { text-align: left; 
                 color: white;
                 background-color: darkblue; }
-tr.oddrow     { background-color: white; }
+tr:nth-child(odd)  td   { background-color: white; }
 
 /*************************************************************************
 * (C) Copyright 1992-2012 by Deitel & Associates, Inc. and               *

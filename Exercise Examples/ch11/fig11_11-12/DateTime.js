@@ -30,7 +30,7 @@ function start() {
 
    // set methods
    anotherDate.setDate(31);
-   anotherDate.setMonth(11);
+   anotherDate.setMonth(-1);
    anotherDate.setFullYear(2011);
    anotherDate.setHours(23);
    anotherDate.setMinutes(59);

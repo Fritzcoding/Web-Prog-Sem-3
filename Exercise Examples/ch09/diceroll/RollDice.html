@@ -86,9 +86,9 @@
 
       // set image source for a die
       function setImage(dieNumber, face) {
-         let dieImg = document.getElementById("die" + dieNumber);
-         dieImg.setAttribute("src", "die" + face + ".png");
-         dieImg.setAttribute("alt", "die with " + face + " spot(s)");
+         
+         document.getElementById("die" + dieNumber).setAttribute("src", "die" + face + ".png");
+         document.getElementById("die" + dieNumber).setAttribute("alt", "die with " + face + " spot(s)");
       } // end function setImage
 
       // update frequency table in the page

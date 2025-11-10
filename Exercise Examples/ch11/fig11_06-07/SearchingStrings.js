@@ -13,7 +13,7 @@ function buttonPressed() {
       "<p>First occurrence from index 12 is located at index " +
       letters.indexOf(inputField.value, 12) + "</p>" +
       "<p>Last occurrence from index 12 is located at index " +
-      letters.lastIndexOf(inputField.value, 12) + "</p>";
+      letters.lastIndexOf("m", 12) + "</p>";
 } // end function buttonPressed
 
 // register click event handler for searchButton

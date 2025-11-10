@@ -1,6 +1,6 @@
 // Fig. 12.5: coverviewer.js 
 // Script to demonstrate dynamic styles used for animation. 
-let interval = null; // keeps track of the interval
+let interval = 0; // keeps track of the interval
 let speed = 6; // determines the speed of the animation
 let count = 0; // size of the image during the animation
 
@@ -11,7 +11,7 @@ function run() {
    // stop the animation when the image is large enough
    if (count >= 375) {
       window.clearInterval(interval);
-      interval = null;
+      interval = 0;
    } // end if
 
    let bigImage = document.getElementById("imgCover");

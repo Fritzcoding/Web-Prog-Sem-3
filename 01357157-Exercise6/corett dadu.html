@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>coret2 rolldice</title>
+    <style>
+        img.images {
+            margin-top:10px;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        let frequency = new Array(7).fill(0);
+        let face;
+        let total = 0;
+        
+        function rolldice(forcevalues){
+            let result = document.getElementById("results");
+            result.innerHTML = "";
+            total = 0;
+            frequency.fill(0);
+            let dice = forcevalues;
+            if(Array.isArray(forcevalues)){
+                for(let k = 0; k < 4; k++){
+                    frequency[dice[k]]++;
+                    total += dice[k];
+                    document.getElementById("dice" +(k+1)).setAttribute("src", "die" + dice[k] + ".jpg");
+                }
+            } else {
+                for(let i = 0; i < 4; i++){
+                    face = Math.floor(1 + Math.random() * 6);
+                    frequency[face]++;
+                    total += face;
+                    document.getElementById("dice" +(i+1)).setAttribute("src", "die" + face + ".jpg");
+                }
+            }
+            
+            printresult();
+            
+        }
+        
+        function printresult(){
+            let result = document.getElementById("results");
+            let max = frequency[0];
+            let maxidx;
+            for(let obj in frequency){
+                if(frequency[obj]> max){
+                    max = frequency[obj];
+                    maxidx = obj;
+                }
+                if(frequency[obj] == max && obj > maxidx){
+                    maxidx = obj;
+                }
+            }
+            switch(max){
+                case 1:
+                    result.innerHTML = "<p>gada yg sm, wu mian</p>";
+                    break;
+                case 2:
+                    if(maxidx == 6){
+                        let temp = 12;
+                        result.innerHTML += "<p>result is" + temp +"</p>";
+                        result.innerHTML += `<img src="congrats.png" alt="congrats">`
+                        break;
+                    }
+                    let temp = total - 2*maxidx;
+                    result.innerHTML += "<p>result is" + temp + "</p>";
+                    break;
+                case 3:
+                    result.innerHTML = "<p>reroll</p>";
+                    break;
+                case 4:
+                    result.innerHTML = "<p>congrats coy</p>";    
+                    break;
+            }
+        }
+
+        function start(){
+            let button = document.getElementById("rolldice");
+            button.addEventListener("click", rolldice, false);
+            document.getElementById("Shortcut").addEventListener("click", function (){
+                face = Math.floor(1 + Math.random() *6);
+                rolldice([face,face,face,face]);
+            } , false);
+            document.getElementById("Shortcut2").addEventListener("click", function (){
+                face = Math.floor(1 + Math.random() *5);
+                rolldice([6, 6, face, face]);
+            } , false);
+        }
+
+        window.addEventListener("load", start, false);
+    </script>
+</head>   
+<body>
+    <form action="#">
+            <input id="rolldice" type="button" value="rolldice">
+            <input id="Shortcut" type="button" value="Shortcut">
+            <input id="Shortcut2" type="button" value="Shortcut2">
+        </form>
+        <div>
+            <img class="images" id="dice1" alt="dice1" src="blank.jpg">
+            <img id="dice2"  class="images"alt="dice2" src="blank.jpg">
+            <img id="dice3" alt="dice3" class="images" src="blank.jpg">
+            <img id="dice4" alt="dice4" class="images" src="blank.jpg">
+        </div>
+
+        <div id="results"></div>
+</body>
+    
+
+</html>

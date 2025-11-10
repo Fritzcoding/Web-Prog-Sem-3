@@ -39,13 +39,20 @@
   .controls{ margin:8px 0 14px 0; }
 
   input[type="button"]{
-    padding:6px 10px;
+    margin-top: 5px;
+    margin-bottom:5px;
+    padding-right: 10px;
     border:1px solid #666;
     background:#eee;
     cursor:pointer;
     border-radius:3px;
     font-size:13px;
+    height:20px;
+    text-align: center;
+    line-height: -100px;
+
   }
+
   input[type="button"]:hover{ background:#e0e0e0; }
 
   table{
@@ -77,6 +84,10 @@
     max-width:100%;
   }
 
+  #titleInput , #authorInput , #yearInput , #urlInput{
+    height: 10px;
+  }
+
   @media(max-width:820px){
     .input-row{ flex-wrap:wrap; gap:6px; }
   }
@@ -97,6 +108,8 @@
     <input type="button" id="removeAllButton" value="Remove All Items">
   </div>
 </form>
+
+<hr>
 
 <table id="booksTable">
   <thead>
@@ -167,7 +180,7 @@ function removeAllItems(){
     if(k&&k.startsWith('ntou-')) keys.push(k);
   }
   keys.forEach(k=>localStorage.removeItem(k));
-  alert('All items were removed!');
+  alert('這個網頁顯示\nAll items were removed!');
   loadBooks();
 }
 
