@@ -136,17 +136,14 @@ function loadBooks(){
   if(keys.length===0) return;
 
   keys.forEach((key)=>{
-    try{
       const b=JSON.parse(localStorage.getItem(key));
       const tr=document.createElement('tr');
       const safeUrl=b.url||'#';
-      tr.innerHTML=`
+      tbody.innerHTML +=`<tr>
         <td>${b.title||''}</td>
         <td>${b.author||''}</td>
         <td>${b.year||''}</td>
-        <td><a href="${safeUrl}" target="_blank">${safeUrl}</a></td>`;
-      tbody.appendChild(tr);
-    }catch(e){ console.warn('Bad JSON for',key); }
+        <td><a href="${safeUrl}" target="_blank">${safeUrl}</a></td></tr>`;
   });
 }
 

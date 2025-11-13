@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>coret2 exercise 8-2</title>
+    <style>
+        body{
+            font-family:"Perpetua",Arial,sans-serif;
+            max-width:980px;
+            margin:18px auto;
+            padding:8px;
+            background:#fff;
+            color:#111;
+        }
+
+        .header{
+            display:flex;
+            flex-wrap:nowrap;
+            gap:8px;
+            margin-bottom:10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="url"]{
+            height:26px;
+            padding:4px 6px;
+        }
+
+        label{ white-space:nowrap; font-weight:bold; }
+
+        .header label{
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+
+        #booktitle{ width:170px; height: 10px;}
+        #author{ width:150px; height: 10px;}
+        #year{ width:150px;height: 10px; }
+        #url{ width:190px;height: 10px; }
+        
+        .button{
+            margin-top: 10px;
+        }
+
+        table{
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        th{
+            background-color: navy;
+            color: white;
+        }
+
+        tbody tr:nth-child(odd) td{
+            background-color: rgb(6, 173, 168);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:8px;
+            font-family:Perpetua,serif;
+        }
+
+        th,td{
+            border:1px solid #000;
+            padding:6px 8px;
+            text-align:center;
+            vertical-align:middle;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <label>Book&nbsp;Title:&nbsp;<input type="text" id="booktitle"></label>
+        <label>Author:&nbsp;<input type="text" id="author"></label>
+        <label>Year:&nbsp;<input type="number" id="year"></label>
+        <label>Book URL:&nbsp;<input type="url" id="url"></label>
+    </div>
+    <div class="button">
+        <input type="button" id="addnew" value="Add New Items">
+        <input type="button" id="removeall" value="Remove All Items">
+    </div>
+    <hr>
+
+    <table id="table">
+        <thead>
+            <tr>
+                <th style="width:44%;">Title</th>
+                <th style="width:22%;">Author</th>
+                <th style="width:10%;">Year</th>
+                <th style="width:24%;">URL</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+
+    <script>
+        let bt = document.getElementById("booktitle");
+        let athr = document.getElementById("author");
+        let yr = document.getElementById("year");
+        let burl = document.getElementById("url");
+        const tbody = document.getElementById("tbody");
+        
+        function loadbooks(){
+            let keys = Object.keys(localStorage).filter(k=>k.startsWith("ntou-")).sort((a,b) => Number(a.slice(5)) - Number(b.slice(5)));
+            tbody.innerHTML = "";
+            for(let key of keys){
+                let temp = JSON.parse(localStorage.getItem(key));
+                tbody.innerHTML += `<tr>
+                <td>${temp.title || ""}</td>
+                <td>${temp.author || ""}</td>
+                <td>${temp.year || ""}</td>
+                <td><a href="${temp.url || ''}" target="_blank">${temp.url || ""}</a></td>
+                </tr>`;
+            }
+        }
+
+        function addbooks(){
+            let title = bt.value;
+            let author = athr.value;
+            let year = yr.value;
+            let url = burl.value;
+
+            if(!title||!author||!year||!url){
+                window.alert('Please fill in all fields!');
+                return;
+            }
+
+            let key = "ntou-" + new Date().getTime();
+            let obj = {title,author,year,url};
+            localStorage.setItem(key, JSON.stringify(obj));
+
+            bt.value = "";
+            athr.value = "";
+            yr.value = "";
+            burl.value = "";
+
+            loadbooks();
+        }
+
+        function removefunc(){
+            let keys = Object.keys(localStorage).filter(k=>k.startsWith("ntou-"));
+
+            for(let key of keys){
+                localStorage.removeItem(key);
+            }
+            
+            window.alert('這個網頁顯示\nAll items were removed!');
+            loadbooks();
+        }
+
+        function start(){
+            let addbtn = document.getElementById("addnew");
+            addbtn.addEventListener("click", addbooks, false);
+            let removebtn = document.getElementById("removeall");
+            removebtn.addEventListener("click", removefunc, false);
+            loadbooks();
+        }
+
+        window.addEventListener("load", start, false);
+    </script>
+</body>
+</html>
