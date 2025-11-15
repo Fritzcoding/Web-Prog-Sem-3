@@ -1,9 +1,9 @@
 // Fig 14.7: mouseoverout.js 
 // Events mouseover and mouseout. 
-const image1 = new Image();
+const image1 = document.createElement("img");
 image1.src = "heading1.png";
 const image2 = new Image();
-image2.src = "heading2.png";
+image2.setAttribute("src", "heading2.png");
 
 function mouseOver(e) {
    // swap the image when the mouse moves over it
@@ -14,8 +14,7 @@ function mouseOver(e) {
    // if the element is an li, assign its id to its color
    // to change the hex code's text to the corresponding color
    if (e.target.tagName.toLowerCase() == "li") {
-      e.target.setAttribute("style",
-         "color: " + e.target.getAttribute("id"));
+      e.target.style.color = e.target.id;
    } // end if
 } // end function mouseOver
 

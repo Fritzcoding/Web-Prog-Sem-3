@@ -30,6 +30,7 @@ function registerListeners(object, messageNumber) {
       function () { helpText.innerHTML = helpArray[6]; }, false);
 } // end function registerListener
 
+
 window.addEventListener("load", init, false);
 
 

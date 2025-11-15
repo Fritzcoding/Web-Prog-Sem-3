@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Simple Animation</title>
+	<style>
+		#canvas {
+			position: relative;
+			margin: 20px auto;
+		}
+		img {
+			transition: all 0.5s ease;
+		}
+	</style>
+	<script>
+		const picAry = ["microsoft.png", "google.png", "yahoo.png", "facebook.png", "amazon.png", "apple.png"];
+		let canvas;
+		let count = 0;
+		function updatepos(){
+			let img;
+			for(let idx in picAry){
+				if(count == 0){
+					img = document.createElement("img");
+					img.id = idx;
+					img.src = picAry[idx];
+					img.alt = "Company logo";
+
+					img.style.width = "120px";
+					img.style.height = "120px";
+					img.style.position = "absolute";
+				} 
+				else{
+					img = document.getElementById(idx);
+				}
+				
+				let randomx = 100 + Math.floor(Math.random() * 401); 
+				let randomy = 100 + Math.floor(Math.random() * 301); 
+				img.style.left = randomx + "px";
+				img.style.top = randomy + "px";
+				img.style.zIndex = idx + 1;
+
+				if(count == 0) canvas.appendChild(img);
+				
+			}
+			++count;
+		}
+
+		function start(){
+			canvas = document.getElementById("canvas");
+			setInterval(updatepos, 2000);
+			updatepos();
+		}
+
+		window.addEventListener("load", start, false);
+	</script>
+</head>
+<body>
+	<div id="canvas"></div>
+</body>
+</html>	

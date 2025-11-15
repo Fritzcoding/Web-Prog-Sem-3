@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Pin Pictures</title>
+    <style type="text/css">
+        div.nav {
+            border: 1px solid skyBlue;
+            margin-left: 3px;
+            padding: 3px;
+            float: left;
+        }
+
+        input, p, li {
+            font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+        }
+
+        li {
+            font-size: 12px;
+        }
+
+        img.picture, img.picturepin {
+            position: absolute;
+        }
+
+        img.picture {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        let zCounter = 2; 
+        const pins = ["red.png", "blue.png", "yellow.png"];
+
+        // Load saved pictures from localStorage
+        function load() {
+            let saved = JSON.parse(localStorage.getItem("pairs") || "[]");
+
+            if (!localStorage.getItem("initialized")) {
+                // create Doraemon once at (50,50) with a red pin as an example
+                createPair("doraemon.png", "red.png", 50, 50, 1);
+
+                // save to storage and mark initialized so we don't re-create on future loads
+                save();
+                localStorage.setItem("initialized", "true");
+                // zCounter should be > existing max z
+                zCounter = 2;
+            }
+
+            // Recreate each saved element
+            saved.forEach(obj => {
+                createPair(obj.picSrc, obj.pinSrc, obj.x, obj.y, obj.z);
+            });
+        }
+
+        // Create a picture + pin pair on screen
+        function createPair(picSrc, pinSrc, x, y, z) {
+            // container
+            const pair = document.createElement("div");
+            pair.className = "pair";
+
+            // picture
+            const pic = document.createElement("img");
+            pic.className = "picture";
+            pic.src = picSrc;
+            pic.style.left = x + "px";
+            pic.style.top = y + "px";
+            pic.style.zIndex = z;
+
+            // pin (position above picture)
+            const pin = document.createElement("img");
+            pin.className = "picturepin";
+            pin.src = pinSrc;
+            pin.style.width = "30px";
+
+            pin.style.left = (x + 85) + "px";    // center pin
+            pin.style.top = (y - 10) + "px";     // slightly above picture
+            pin.style.zIndex = z + 1;
+
+            pair.appendChild(pic);
+            pair.appendChild(pin);
+            document.body.appendChild(pair);
+
+            enableDrag(pic, pin);
+        }
+
+        function enableDrag(pic, pin) {
+            let offsetX = 0, offsetY = 0;
+            let isDragging = false;
+
+            function startDrag(e) {
+                isDragging = true;
+                offsetX = e.clientX - parseInt(pic.style.left);
+                offsetY = e.clientY - parseInt(pic.style.top);
+
+                // bring to front
+                pic.style.zIndex = zCounter++;
+                pin.style.zIndex = parseInt(pic.style.zIndex) + 1;
+                
+                // Prevent text selection while dragging
+                e.preventDefault();
+            }
+
+            function doDrag(e) {
+                if (!isDragging) return;
+
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+
+                // boundaries (inside blackboard: 960x720)
+                newX = Math.max(0, Math.min(newX, 760));  // 960 - 200
+                newY = Math.max(0, Math.min(newY, 520));  // 720 - 200
+
+                pic.style.left = newX + "px";
+                pic.style.top = newY + "px";
+
+                // move pin with picture
+                pin.style.left = (newX + 85) + "px";
+                pin.style.top = (newY - 10) + "px";
+            }
+
+            function stopDrag() {
+                if (isDragging) {
+                    isDragging = false;
+                    save(); // save new coordinates
+                }
+            }
+
+            // Add event listeners
+            pic.addEventListener("mousedown", startDrag);
+            document.addEventListener("mousemove", doDrag);
+            document.addEventListener("mouseup", stopDrag);
+            
+            // Additional safety: stop drag if mouse leaves window
+            document.addEventListener("mouseleave", stopDrag);
+            
+            // Prevent image drag (browser's native drag)
+            pic.addEventListener("dragstart", (e) => e.preventDefault());
+        }
+
+        // Save current screen state
+        function save() {
+            const pics = document.getElementsByClassName("picture");
+            const pinsImg = document.getElementsByClassName("picturepin");
+
+            const data = [];
+
+            for (let i = 0; i < pics.length; i++) {
+                data.push({
+                    picSrc: pics[i].src.split("/").pop(),
+                    pinSrc: pinsImg[i].src.split("/").pop(),
+                    x: parseInt(pics[i].style.left),
+                    y: parseInt(pics[i].style.top),
+                    z: parseInt(pics[i].style.zIndex)
+                });
+            }
+
+            localStorage.setItem("pairs", JSON.stringify(data));
+        }
+
+        // Add new picture
+        function add() {
+            const num = parseInt(document.getElementById("pic").value);
+            const x = parseInt(document.getElementById("x").value);
+            const y = parseInt(document.getElementById("y").value);
+
+            if (num < 1 || num > 10) {
+                alert("請輸入 1~10 的編號");
+                return;
+            }
+
+            const picSrc = "0" + num + ".png";
+            const pinSrc = pins[Math.floor(Math.random() * pins.length)];
+            const z = zCounter++;
+
+            createPair(picSrc, pinSrc, x, y, z);
+            save();
+        }
+
+        // Remove everything
+        function removeall() {
+            const pairs = document.getElementsByClassName("pair");
+            while (pairs.length > 0) {
+                pairs[0].remove();
+            }
+            localStorage.removeItem("pairs");
+            
+        }
+
+        function start() {
+            document.getElementById("addButton").addEventListener("click", add);
+            document.getElementById("removeAllButton").addEventListener("click", removeall);
+            load();
+        }
+
+        window.addEventListener("load", start);
+    </script>
+</head>
+
+<body>
+    <img src="blackboard.jpg" height="720" width="960" style="float:left; z-index:0;" />
+
+    <div id="nav" class="nav">
+        <form action="#">
+            <p>
+                <label>要放哪個道具圖片(請輸入編號):
+                    <input type="number" id="pic" min="1" max="10" step="1" value="1" />
+                </label>
+                <br />
+                <label>圖片X座標:
+                    <input type="number" id="x" min="40" max="600" step="1" value="40" />
+                </label>
+                <br />
+                <label>圖片Y座標:
+                    <input type="number" id="y" min="40" max="400" step="1" value="100" />
+                </label>
+            </p>
+            <p>
+                <input type="button" value="新增圖片" id="addButton">
+                <input type="button" value="移除所有圖片" id="removeAllButton">
+            </p>
+        </form>
+
+        <ul>
+            <li>[01]任意門</li>
+            <li>[02]時光機</li>
+            <li>[03]竹蜻蜓</li>
+            <li>[04]時光布</li>
+            <li>[05]記憶麵包</li>
+            <li>[06]縮小燈</li>
+            <li>[07]翻譯蒟蒻</li>
+            <li>[08]如果電話亭</li>
+            <li>[09]穿透環</li>
+            <li>[10]更衣照相機</li>
+        </ul>
+    </div>
+</body>
+</html>

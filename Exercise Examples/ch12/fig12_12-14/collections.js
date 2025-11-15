@@ -5,11 +5,11 @@ function processLinks() {
    let contents = "<ul>";
 
    // concatenate each link to contents
-   for (let i = 0; i < linksList.length; ++i) {
-      let currentLink = linksList[i];
-      contents += "<li><a href='" + currentLink.href + "'>" +
-         currentLink.innerHTML + "</li>";
-   } // end for
+   for (let link in linksList) {
+      let currentLink = linksList[link];
+      contents += "<li><a href='"+currentLink+"' target='_blank'>click</a></li>";
+   } // end for 
+   
 
    contents += "</ul>";
    document.getElementById("links").innerHTML = contents;

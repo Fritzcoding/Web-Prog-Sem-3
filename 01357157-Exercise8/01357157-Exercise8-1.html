@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>哆啦A夢道具抽選機</title>
     <style>
-        @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+        @import url(https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css);
         body {
             font-family: "cwTeXKai", "Noto Sans TC", serif;
             text-align: center;
@@ -59,9 +59,10 @@
             const msg = document.getElementById("messages");
             const sound = document.getElementById("sound");
 
+            sound.play();
             // Disable button
             playBtn.disabled = true;
-            msg.textContent = "抽取中...";
+            msg.innerHTML = "抽取中...";
             img.alt = "";
             img.src = "blank.jpg"; // show gray background
 
@@ -71,25 +72,19 @@
 
             // When sound ends, show result
             sound.onended = function() {
-                const fileName = (randomIndex + 1).toString().padStart(2, '0') + ".png";
-                img.src = fileName;
-                msg.textContent = selectedGadget;
+                img.setAttribute("src", "0" + (randomIndex +1) + ".png");
+                msg.innerHTML = selectedGadget;
                 playBtn.disabled = false;
             };
-
-            // Play Doraemon sound
-            sound.play();
         }
 
         window.onload = function() {
-            document.getElementById("gadget").src = "00.png";
-            document.getElementById("messages").textContent = "請按下按鈕抽出道具";
             document.getElementById("play").onclick = drawGadget;
         };
     </script>
 </head>
 <body>
-    <audio id="sound" preload="auto">
+    <audio id="sound">
         <source src="doraemon.mp3" type="audio/mpeg">
         您的瀏覽器不支援音效播放
     </audio>
